@@ -1,6 +1,6 @@
 package test;
 
-//import java.security.NoSuchAlgorithmException;
+
 import java.util.*;
 import java.io.*;
 import java.security.MessageDigest;
@@ -27,7 +27,7 @@ public class hash_test {		//InputStream是一个输入流的抽象类
         } while (numRead != -1);   // numRead == -1代表文件读取完毕了
       
         is.close();      // 关闭输入流 
-        return complete.digest();  // 返回SHA1哈希值
+        return complete.digest();  // 返回SHA1哈希值，结果为字符数组
     }
     
     public static String convertToHexString(byte data[]) { 
@@ -66,7 +66,7 @@ public class hash_test {		//InputStream是一个输入流的抽象类
     			if(fs[i].isDirectory()) { 
     				System.out.println("directory " + path + File.separator + fs[i].getName());
     				m.update(fs[i].getName().getBytes());  
-    				String treekey = dfs(path + File.separator + fs[i].getName()); 
+    				String treekey = dfs(path + File.separator + fs[i].getName());   //递归
     				
     				m.update(treekey.getBytes()); 
     			}	
@@ -75,7 +75,7 @@ public class hash_test {		//InputStream是一个输入流的抽象类
     		return convertToHexString(m.digest());
     		}
     		catch(Exception e) { 
-    			// 有可能PATH其实是一个文件，导致listFiles()方法报错
+    			// 有可能输入的PATH只是一个文件，而不是文件夹，导致listFiles()方法报错
     	
     			try {
     				FileInputStream is = new FileInputStream(dir);
@@ -84,7 +84,7 @@ public class hash_test {		//InputStream是一个输入流的抽象类
     				return result;
     			}	
     			
-    			catch(Exception c) {
+    			catch(FileNotFoundException cd) {       
     				return "error! 路径不存在";
     			}
     		}
@@ -93,9 +93,9 @@ public class hash_test {		//InputStream是一个输入流的抽象类
 
     public static void main(String[] args) {
     	System.out.println("请输入文件路径：");
-    	Scanner dir = new Scanner(System.in);
-    	System.out.println("该路径下所有文件的哈希值依次为： " + dfs(dir.nextLine()));
-    	dir.close();
+    	Scanner input = new Scanner(System.in);
+    	System.out.println("该路径下所有文件的哈希值依次为： " + dfs(input.nextLine()));
+    	input.close();
     }
 }
 
